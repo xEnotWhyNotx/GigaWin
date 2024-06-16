@@ -17,6 +17,8 @@ COPY . .
 COPY requirements.txt .
 
 # Устанавливаем зависимости
+RUN pip install --upgrade pip wheel
+RUN pip install --no-build-isolation catboost
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Указываем порт, который будет использоваться контейнером
@@ -24,3 +26,4 @@ EXPOSE 8050
 
 # Определяем команду для запуска приложения
 CMD ["python", "main.py"]
+
