@@ -147,7 +147,7 @@ df_ASUPR = df_ASUPR.groupby(['UNOM', 'Месяц/Год']).agg({'Объём по
                                                                            'Температура обратки': 'mean',
                                                                            'ON': 'min'
                                                                            }).reset_index()
-df_ASUPR['Ошибки'] = df_ASUPR['Ошибки'].replace({'': np.NaN})
+df_ASUPR['Ошибки'] = df_ASUPR['Ошибки'].replace({'': np.nan})
 df_ASUPR = df_ASUPR[df_ASUPR['Центральное отопление(контур)'].isin(['ЦО1', 'ЦО2', 'ЦО3', 'ЦО4', 'ТЭ1', 'ТЭ2'])]
 
 errors = list(df_ASUPR['Ошибки'].value_counts().index)
@@ -176,7 +176,7 @@ df_moek['Адрес строения'] = df_moek['Адрес строения'].
 df_moek = df_moek[['Адрес строения', 'Вид ТП', 'Источник теплоснабжения', 'Тип по размещению', 'Номер ТП']]
 df_moek = df_moek.merge(df_ASUPR[['UNOM', 'Адрес']], left_on='Адрес строения', right_on='Адрес', how='left').drop(columns=['Адрес строения'])
 df = df.merge(df_moek, left_on='unom', right_on='UNOM', how='left').drop(columns=['Адрес', 'UNOM'])
-df_iznos = pd.read_excel('серии домов и износ.xlsx')
+df_iznos = pd.read_excel('service/серии домов и износ.xlsx')
 df = df.merge(df_iznos.drop(columns=['alter_address', 'alter_unom']), on='unom', how='left')
 df = df.drop_duplicates()
 df = df.drop(columns=['Серии проэктов', 'lat', 'lon', 'Площадь', 'total_living_area', 'total_nliving_area', 'Квартиры'])
@@ -268,8 +268,8 @@ def prosentage_temp_delta(row):
         row['ERR1'] = ERR1
         row['ERR2'] = ERR2
     except:
-        row['ERR1'] = np.NAN
-        row['ERR2'] = np.NAN
+        row['ERR1'] = np.nan
+        row['ERR2'] = np.nan
     return row
 
 df_ASUPR = df_ASUPR.apply(prosentage_temp_delta, axis=1)
