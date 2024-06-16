@@ -153,18 +153,6 @@ df_ASUPR = df_ASUPR[df_ASUPR['Центральное отопление(конт
 errors = list(df_ASUPR['Ошибки'].value_counts().index)
 errors_UE = [err for err in errors if 'U' in err or 'E' in err]
 
-df_coard = pd.read_excel('data/13. Адресный реестр объектов недвижимости города Москвы.xlsx')
-df_coard = df_coard.drop(0)
-df_coard = df_coard[['UNOM', 'geodata_center']]
-df_coard['UNOM'] = df_coard['UNOM'].astype('int')
-df_coard = df_coard.dropna()
-
-def get_coard(row):
-    longitude, latitude = row['geodata_center'].split('[')[1].split(']')[0].split(', ')
-    row['longitude'] = float(longitude)
-    row['latitude'] = float(latitude)
-    return row
-df_coard = df_coard.apply(get_coard, axis=1).drop('geodata_center', axis=1)
 
 df = pd.read_excel('data/14. ВАО_Многоквартирные_дома_с_технико_экономическими_характеристиками.xlsx')
 df = df.drop(0)
