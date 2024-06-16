@@ -3,12 +3,14 @@ import pandas as pd
 import dash_bootstrap_components as dbc
 import dash_leaflet as dl
 from dash_extensions.javascript import assign
+from Prediction_pypeline import predict
+
 
 register_page(__name__, path='/prediction')
 
 # Загружаем данные
 df_for_tern_off = pd.read_pickle('service/df_for_tern_off.pkl')
-df_preds_cat = pd.read_csv('service/preds_cat.csv', encoding='utf-8')
+df_preds_cat = predict()
 
 def find_all_geo():
     df_TP = df_for_tern_off[['Адрес ТП', 'latitude_x', 'longitude_x']].drop_duplicates()
