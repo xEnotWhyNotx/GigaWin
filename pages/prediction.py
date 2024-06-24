@@ -10,6 +10,10 @@ register_page(__name__, path='/prediction')
 
 # Загружаем данные
 df_for_tern_off = pd.read_pickle('service/df_for_tern_off.pkl')
+df_walls = pd.read_pickle('service/dict_predict_walls.pkl')
+df_serie = pd.read_pickle('service/dict_predict_serie.pkl')
+# убираем лишний район москвы
+df_for_tern_off = df_for_tern_off[df_for_tern_off['latitude_y'] < 55.87]
 # df_preds_cat = pd.read_csv('service/preds_cat.csv')
 df_preds_cat = predict()
 
@@ -45,6 +49,9 @@ df_houses_all.rename(columns={
     'old': 'old'
 }, inplace=True)
 
+df_houses_all['walls'] = df_houses_all['walls'].replace(df_walls)
+df_houses_all['predict_serie'] = df_houses_all['predict_serie'].replace(df_serie)
+
 # Создаем структуру GeoJSON для ЦПТ
 features_tp = [
     {
@@ -64,9 +71,7 @@ on_each_feature_tp = assign("""
     function(feature, layer, context){
         layer.bindTooltip(
             '<div>' +
-                '<center style="font-weight: bold">' + feature.properties['type'] + '</center>'  +
                 '<b>Address:</b> ' + feature.properties['Address'] + '<br>' +
-                '<b>CTP number:</b> ' + feature.properties['num'] + '<br>' +      
                 '<b>id:</b> ' + feature.properties['id'] +
             '</div>',
             {permanent: false, direction: 'top'}

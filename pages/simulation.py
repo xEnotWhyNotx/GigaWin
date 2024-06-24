@@ -333,7 +333,7 @@ layout = html.Div([
                 dcc.Dropdown(
                     id='map-style-dropdown',
                     options=[{'label': style, 'value': style} for style in mapbox_ids],
-                    value='dark-v10',
+                    value='light-v10',
                     placeholder="Выберите стиль карты"
                 )
             ]),
@@ -762,10 +762,12 @@ def update_geojson_and_map_style(feature, selected_style, click_lat_lng):
 def download_data(store, n_clicks):    
     data = pd.DataFrame.from_dict(store)
     if ('time_in_hours') in data:
-        data = data.sort_values(by=['group', 'time_in_hours'])
+        data = data.sort_values(by=['group', 'time_in_hours']).rename(columns={'UNOM':'Номер БТИ','group':'Тип объекта', 'ctp_number': 'Номер ЦТП (ИТП)', 'heatstation': 'Наименование источника',
+                                                                                 'heatloss': 'Потребляемая мощность, Гкал/ч', 'time_in_hours': 'Время критического остывания, ч'})
         return dcc.send_data_frame(data.to_excel, "Таблица остывания объектов.xlsx", index=False)
     else:
-        data = data.sort_values(by=['group', 'heatloss'], ascending=[True, False])
+        data = data.sort_values(by=['group', 'heatloss'], ascending=[True, False]).rename(columns={'UNOM':'Номер БТИ','group':'Тип объекта', 'ctp_number': 'Номер ЦТП (ИТП)',
+                                                                                                    'heatstation': 'Наименование источника','heatloss': 'Потребляемая мощность, Гкал/ч'})
         return dcc.send_data_frame(data.to_excel, "Таблица потребляемой мощности объектов.xlsx", index=False)
 
 # темная тема для knob
