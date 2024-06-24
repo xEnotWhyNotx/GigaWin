@@ -10,6 +10,7 @@ register_page(__name__, path='/prediction')
 
 # Загружаем данные
 df_for_tern_off = pd.read_pickle('service/df_for_tern_off.pkl')
+# df_preds_cat = pd.read_csv('service/preds_cat.csv')
 df_preds_cat = predict()
 
 def find_all_geo():
@@ -63,7 +64,9 @@ on_each_feature_tp = assign("""
     function(feature, layer, context){
         layer.bindTooltip(
             '<div>' +
+                '<center style="font-weight: bold">' + feature.properties['type'] + '</center>'  +
                 '<b>Address:</b> ' + feature.properties['Address'] + '<br>' +
+                '<b>CTP number:</b> ' + feature.properties['num'] + '<br>' +      
                 '<b>id:</b> ' + feature.properties['id'] +
             '</div>',
             {permanent: false, direction: 'top'}
